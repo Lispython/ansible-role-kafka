@@ -1,15 +1,16 @@
 ---
 - import_tasks: sasl-auth.yml
   tags: [kafka, kafka_config, config, sasl, auth]
+  when: kafka_sasl_enabled|bool
 
-- name: Create environment file for Kafka systemd service
+- name: "kafka | {{ ansible_hostname }} | Create environment file for Kafka systemd service"
   template:
     src: kafka.env.j2
     dest: "{{ kafka_conf_dir }}/kafka.env"
     mode: '0644'
   notify: Restart Kafka
 
-- name: Create kafka server properties file
+- name: "kafka | {{ ansible_hostname }} | Create kafka server properties file"
   template:
     src: server.properties.j2
     dest: "{{ kafka_conf_dir }}/server.properties"
@@ -18,7 +19,7 @@
     mode: '0644'
   notify: Restart Kafka
 
-- name: Create JMX password file
+- name: "kafka | {{ ansible_hostname }} | Create JMX password file"
   template:
     src: jmxremote.password.j2
     dest: "{{ kafka_conf_dir }}/jmxremote.password"
@@ -28,7 +29,7 @@
   notify: Restart Kafka
   when: kafka_jmx_enabled and kafka_jmx_username is defined and kafka_jmx_password is defined
 
-- name: Create JMX access file
+- name: "kafka | {{ ansible_hostname }} | Create JMX access file"
   template:
     src: jmxremote.access.j2
     dest: "{{ kafka_conf_dir }}/jmxremote.access"

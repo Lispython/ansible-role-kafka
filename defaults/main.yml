@@ -6,12 +6,15 @@ kafka_group: kafka
 
 kafka_version: 2.5.0
 kafka_scala_version: 2.12
-kafka_broker_id: 1 # must be set to a unique integer for each broker
+
+kafka_download_url: "https://downloads.apache.org/kafka/{{ kafka_version }}/kafka_{{ kafka_scala_version }}-{{ kafka_version }}.tgz"
 
 kafka_install_dir: /usr/local/kafka
 kafka_conf_dir: /etc/kafka
 kafka_data_dir: /var/lib/kafka
 kafka_log_dir: /var/log/kafka
+
+kafka_broker_id: 1 # must be set to a unique integer for each broker
 
 kafka_host: "{{ ansible_default_ipv4.address }}"
 ############################# Basic Kafka Settings
@@ -97,8 +100,7 @@ kafka_log_retention_check_interval_ms: 300000
 
 ############################# Zookeeper related Kafka settings
 
-kafka_zookeeper_connection_hosts:
-  - localhost:2181
+kafka_zookeeper_connection_hosts: []
 
 # Timeout in ms for connecting to zookeeper
 kafka_zookeeper_connection_timeout_ms: 18000
@@ -142,3 +144,14 @@ kafka_jmx_role: readonly
 # Optional settings for using authentication
 # kafka_jmx_username: jmx
 # kafka_jmx_password: jmx
+
+
+
+kafka_security_inter_broker_protocol: "PLAINTEXT"
+kafka_sasl_mechanism_inter_broker_protocol: "PLAIN"
+kafka_sasl_enabled_mechanisms: "PLAIN"
+kafka_listeners_protocol: "PLAINTEXT" # SASL_SSL, SASL_PLAINTEXT, PLAINTEXT
+kafka_listeners: "{{ kafka_listeners_protocol }}://{{ kafka_host }}:9092"
+
+kafka_sasl_enabled: false
+kafka_ssl_enabled: false
